@@ -26,23 +26,19 @@ while True:
     else:
         break
 
-month = monthreturn(mformat)
-
 csvscan = pd.read_csv("data/" + fname)
-productlist = []
+plist = []
 
 numberproducts = 0
 numberproductstwo = 0
 
-for n in csvscan['product']:
-    if n not in productlist:
+for p in csvscan['product']:
+    if p not in plist:
         numberproducts = numberproducts + 1
-        productlist.append(n)
+        plist.append(p)
 
 price = csvscan.groupby(csvscan['product']).sum()
-
 price = price.sort_values(by=['sales price'], ascending = False)
-
 totalprice = price['sales price'].sum()
 
 # GRAPH FORMATTING
@@ -53,26 +49,31 @@ salesprice = 0
 while salesprice < numberproducts:
     graphlist.append(price.iloc[salesprice][2])
     salesprice = salesprice + 1
+    
+month = monthreturn(mformat)
 
 print(" ")
-
 print("----------------------------------------")
 print(" ")
-
 print("MONTH: " + month + " " + yformat)
 print(" ")
-
 print("----------------------------------------")
 print(" ")
-
 print("CALCULATING...")
 print(" ")
-
 print("----------------------------------------")
 print(" ")
-
 print("TOTAL MONTHLY SALES: $" + str("{0:,.2f}".format(totalprice)))
 print(" ")
-
 print("----------------------------------------")
 print("TOP SELLING PRODUCTS")
+
+while numberproductstwo < numberproducts:
+    countvar = str(numberproductstwo + 1) 
+    totsales = str("{0:,.2f}".format(price.iloc[numberproductstwo][2])).rjust(9)
+    prodname = str(price.index[numberproductstwo]).ljust(20)
+   
+    hsellinglist = countvar + " - " + prodname + "    $" + totsales
+    print(hsellinglist)
+    numberproductstwo = numberproductstwo + 1
+    # GOT SOME HELP FROM @ideenak ON THIS PART, THANK YOU
