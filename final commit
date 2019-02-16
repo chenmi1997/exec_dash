@@ -112,11 +112,12 @@ print(" ")
 print("VISUALIZING THE DATA...")
 
 fig, bargraph = plotlib.subplots()
-fig.set_figheight(10)
-fig.set_figwidth(25)
+fig.set_figheight(5)
+fig.set_figwidth(30)
 
 for uno, dos in enumerate(graphlist):
-    bargraph.text(dos, uno, " ${0:,.2f}".format(dos))
+    bargraph.text(dos, uno, " ${0:,.2f}".format(dos)).set_fontsize(7)
+    # thank you to @ideenak again, he gave me advice on how to fit this portion of the graph in
 
 datapull = price.index.tolist()
 dashes = ticker.StrMethodFormatter("{x:,.2f}")
@@ -128,14 +129,22 @@ bargraph.set_xlabel("Sales ($)")
 bargraph.set_ylabel("Product")
 
 bargraph.set_title(month + " " + yformat + " - Total Sales by Product") 
+plotlib.tight_layout()
 
 print(" ")
 print("----------------------------------------")
 print(" ")
 print("Thank you for using the Executive Dashboard!")
 
+
 # showing the final product
 
 # plotlib.tight_layout() 
 
+# need to figure out how to fit the last number
+
+# bargraph.xaxis.set_major_formatter(formatter) - got this from @ashishpatel310, doesn't seem to work
+
+
 plotlib.show()
+
