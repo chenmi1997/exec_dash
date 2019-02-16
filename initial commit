@@ -118,4 +118,24 @@ fig.set_figwidth(25)
 for uno, dos in enumerate(graphlist):
     bargraph.text(dos, uno, " ${0:,.2f}".format(dos))
 
+datapull = price.index.tolist()
+dashes = ticker.StrMethodFormatter("{x:,.2f}")
+bargraph.xaxis.set_major_formatter(dashes)
 
+bargraph.barh(datapull,graphlist)
+
+bargraph.set_xlabel("Sales ($)")
+bargraph.set_ylabel("Product")
+
+bargraph.set_title(month + " " + yformat + " - Total Sales by Product") 
+
+print(" ")
+print("----------------------------------------")
+print(" ")
+print("Thank you for using the Executive Dashboard!")
+
+# showing the final product
+
+# plotlib.tight_layout() 
+
+plotlib.show()
