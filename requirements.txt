@@ -1,4 +1,4 @@
 pytest
 pandas
-matplotlib.ticker
-matplotlib.pyplot
+python-matplotlib.ticker
+python-matplotlib.pyplot
