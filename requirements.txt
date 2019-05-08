@@ -1,0 +1,4 @@
+pytest
+pandas
+matplotlib.ticker
+matplotlib.pyplot
