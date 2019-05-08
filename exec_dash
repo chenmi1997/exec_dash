@@ -1,0 +1,154 @@
+import operator
+import matplotlib.ticker as ticker 
+import matplotlib.pyplot as plotlib
+import pandas as pd 
+import os
+
+print("Thank you for using the Executive Dashboard Helper Tool")
+print("----------------------------------------")
+print("Please follow the instructions closely in order to enjoy an optimal experience")
+print("Furthermore, ensure that your monthly sales files are organized in the 'Data' folder")
+print("----------------------------------------")
+
+# DATA PULLING
+
+
+def monthreturn(mformat):
+    calendar = {'01':'January','02':'February','03':'March','04':'April', '05':'May','06':'June','07':'July','08':'August','09':'September','10':'October','11':'November','12':'December'}
+    return calendar[mformat]
+
+if __name__ == "__main__":
+
+    while True:
+        mformat = input("Using the format MM (for example: January is 01), please enter the month for your sales data of choice:      ")
+        yformat = input("Using the format YYYY, please enter the year for your sales data of choice:      ")
+        fname = "sales-" + yformat + mformat + ".csv"
+
+        if not os.path.isfile("data/" + fname):
+            print("Error: data does not exist for the month and year you entered. The file could not be found. Please restart.")
+        else:
+            break
+
+    csvscan = pd.read_csv("data/" + fname)
+    plist = []
+
+    numberproducts = 0
+    numberproductstwo = 0
+
+    for p in csvscan['product']:
+        if p not in plist:
+            numberproducts = numberproducts + 1
+            plist.append(p)
+
+    price = csvscan.groupby(csvscan['product']).sum()
+    price = price.sort_values(by=['sales price'], ascending = False)
+    totalprice = price['sales price'].sum()
+
+    # GRAPH FORMATTING
+
+    graphlist = []
+
+    salesprice = 0
+    while salesprice < numberproducts:
+        graphlist.append(price.iloc[salesprice][2])
+        salesprice = salesprice + 1
+
+    month = monthreturn(mformat)
+
+    print(" ")
+    print("----------------------------------------")
+    print(" ")
+    print("MONTH: " + month + " " + yformat)
+    print(" ")
+    print("----------------------------------------")
+    print(" ")
+    print("CALCULATING...")
+    print(" ")
+    print("----------------------------------------")
+    print(" ")
+    print("TOTAL MONTHLY SALES: $" + str("{0:,.2f}".format(totalprice)))
+    print(" ")
+    print("----------------------------------------")
+    print("TOP SELLING PRODUCTS")
+
+    while numberproductstwo < numberproducts:
+        countvar = str(numberproductstwo + 1) 
+        totsales = str("{0:,.2f}".format(price.iloc[numberproductstwo][2])).rjust(9)
+        prodname = str(price.index[numberproductstwo]).ljust(20)
+    
+        hsellinglist = countvar + " - " + prodname + "    $" + totsales
+        print(hsellinglist)
+        numberproductstwo = numberproductstwo + 1
+        # GOT SOME HELP FROM @ideenak ON THIS PART, THANK YOU
+
+    print("----------------------------------------")
+    print(" ")
+    print("VISUALIZING THE DATA...")
+
+    fig, bargraph = plotlib.subplots()
+    fig.set_figheight(10)
+    fig.set_figwidth(25)
+
+    for uno, dos in enumerate(graphlist):
+        bargraph.text(dos, uno, " ${0:,.2f}".format(dos))
+
+    datapull = price.index.tolist()
+    dashes = ticker.StrMethodFormatter("{x:,.2f}")
+    bargraph.xaxis.set_major_formatter(dashes)
+
+    bargraph.barh(datapull,graphlist)
+
+    bargraph.set_xlabel("Sales ($)")
+    bargraph.set_ylabel("Product")
+
+    bargraph.set_title(month + " " + yformat + " - Total Sales by Product") 
+
+    print(" ")
+    print("----------------------------------------")
+    print(" ")
+    print("Thank you for using the Executive Dashboard!")
+
+    plotlib.show()
+
+    print("----------------------------------------")
+    print(" ")
+    print("VISUALIZING THE DATA...")
+
+    fig, bargraph = plotlib.subplots()
+    fig.set_figheight(5)
+    fig.set_figwidth(30)
+
+    for uno, dos in enumerate(graphlist):
+        bargraph.text(dos, uno, " ${0:,.2f}".format(dos)).set_fontsize(7)
+        # thank you to @ideenak again, he gave me advice on how to fit this portion of the graph in
+
+    datapull = price.index.tolist()
+    dashes = ticker.StrMethodFormatter("{x:,.2f}")
+    bargraph.xaxis.set_major_formatter(dashes)
+
+    bargraph.barh(datapull,graphlist)
+
+    bargraph.set_xlabel("Sales ($)")
+    bargraph.set_ylabel("Product")
+
+    bargraph.set_title(month + " " + yformat + " - Total Sales by Product") 
+    plotlib.tight_layout()
+
+    print(" ")
+    print("----------------------------------------")
+    print(" ")
+    print("Thank you for using the Executive Dashboard!")
+
+
+    # showing the final product
+
+    # plotlib.tight_layout() 
+
+    # need to figure out how to fit the last number
+
+    # bargraph.xaxis.set_major_formatter(formatter) - got this from @ashishpatel310, doesn't seem to work
+
+
+    plotlib.show()
+
+
