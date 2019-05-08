@@ -1,0 +1,10 @@
+# EXECUTIVE DASHBOARD TEST
+
+from exec_dash import monthreturn
+
+def test_monthreturn():
+    result = monthreturn(1)
+    result2 = monthreturn(7)
+    assert result == "January"
+    assert result2 == "July"
+   
